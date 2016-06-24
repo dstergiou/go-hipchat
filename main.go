@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"os"
 
 	"github.com/doneland/yquotes"
 	"github.com/gorilla/mux"
@@ -20,9 +21,10 @@ type Message struct {
 }
 
 func main() {
+	listenPort := os.Getenv("PORT")
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/stockprice", StockPrice)
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":" + listenPort, router))
 }
 
 // StockPrice return the stock price for NET-B
