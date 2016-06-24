@@ -48,7 +48,7 @@ func StockPrice(w http.ResponseWriter, r *http.Request) {
 		Color:         color,
 		MessageFormat: "text",
 		Notify:        "false",
-		Message:       "Current stock price is: " + price + "\nPrevious stock price was: " + oldPrice,
+		Message:       "Current stock price is: " + price + " SEK\nPrevious stock price was: " + oldPrice + " SEK",
 	}
 	json.NewEncoder(w).Encode(response)
 }
