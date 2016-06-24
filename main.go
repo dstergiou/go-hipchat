@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 	"os"
+	"strconv"
 
 	"github.com/doneland/yquotes"
 	"github.com/gorilla/mux"
@@ -24,7 +24,7 @@ func main() {
 	listenPort := os.Getenv("PORT")
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/stockprice", StockPrice)
-	log.Fatal(http.ListenAndServe(":" + listenPort, router))
+	log.Fatal(http.ListenAndServe(":"+listenPort, router))
 }
 
 // StockPrice return the stock price for NET-B
@@ -40,7 +40,7 @@ func StockPrice(w http.ResponseWriter, r *http.Request) {
 		Color:         "green",
 		MessageFormat: "text",
 		Notify:        "false",
-		Message:       "Stock price is:" + price + "\nPrevious close was: " + oldPrice,
+		Message:       "Stock price is: " + price + "\nPrevious close was: " + oldPrice,
 	}
 	json.NewEncoder(w).Encode(response)
 }
