@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"html"
 	"log"
 	"net/http"
 	"strconv"
@@ -22,14 +21,8 @@ type Message struct {
 
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", Index)
 	router.HandleFunc("/stockprice", StockPrice)
 	log.Fatal(http.ListenAndServe(":8080", router))
-}
-
-// Index vanilla response
-func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
 }
 
 // StockPrice return the stock price for NET-B
