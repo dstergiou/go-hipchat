@@ -29,18 +29,26 @@ func main() {
 
 // StockPrice return the stock price for NET-B
 func StockPrice(w http.ResponseWriter, r *http.Request) {
+	var color string
 	stock, err := yquotes.NewStock("NET-B.ST", false)
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	if stock.Price.Last <= stock.Price.PreviousClose {
+		color = "red"
+	} else {
+		color = "green"
+	}
+
 	price := strconv.FormatFloat(stock.Price.Last, 'f', 2, 64)
 	oldPrice := strconv.FormatFloat(stock.Price.PreviousClose, 'f', 2, 64)
 
 	response := &Message{
-		Color:         "green",
+		Color:         color,
 		MessageFormat: "text",
 		Notify:        "false",
-		Message:       "Stock price is: " + price + "\nPrevious close was: " + oldPrice,
+		Message:       "Current stock price is: " + price + "\nPrevious stock price was: " + oldPrice,
 	}
 	json.NewEncoder(w).Encode(response)
 }
