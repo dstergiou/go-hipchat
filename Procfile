@@ -1,1 +1,1 @@
-web: go-hipchat
+web: bin/go-hipchat
