@@ -71,8 +71,8 @@ func StockPrice(w http.ResponseWriter, r *http.Request) {
 		comment = "Stock is " + floatToString(difference) + " SEK above the strike price (109.70 SEK)"
 	}
 
-	message := "Current stock price is: " + floatToString(stock.Price.Last) + " SEK"
-	message += "\nPrevious stock price was: " + floatToString(stock.Price.PreviousClose) + " SEK" + "\n"
+	message := "Current stock price is: " + floatToString(stock.Price.Last) + " SEK\n"
+	message += "Previous stock price was: " + floatToString(stock.Price.PreviousClose) + " SEK" + "\n"
 	message += comment
 	SendMessage(w, color, message)
 }
