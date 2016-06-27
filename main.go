@@ -37,6 +37,10 @@ func SendMessage(w http.ResponseWriter, color string, message string) {
 	json.NewEncoder(w).Encode(response)
 }
 
+func floatToString(number float64) (str string) {
+	return strconv.FormatFloat(number, 'f', 2, 64)
+}
+
 // StockPrice return the stock price for NET-B
 func StockPrice(w http.ResponseWriter, r *http.Request) {
 	var color, comment string
@@ -60,15 +64,15 @@ func StockPrice(w http.ResponseWriter, r *http.Request) {
 	if stock.Price.Last <= strikePrice {
 		difference = strikePrice - stock.Price.Last
 		percentage = (difference / stock.Price.Last) * 100
-		comment = "Stock needs to go up " + strconv.FormatFloat(difference, 'f', 2, 64) + " SEK to hit the strike price (109.70 SEK)"
-		comment += "\n This is a " + strconv.FormatFloat(percentage, 'f', 2, 64) + "% increase that we need"
+		comment = "Stock needs to go up " + floatToString(difference) + " SEK to hit the strike price (109.70 SEK)"
+		comment += "\n This is a " + floatToString(percentage) + "% increase that we need"
 	} else {
 		difference = stock.Price.Last - strikePrice
-		comment = "Stock is " + strconv.FormatFloat(difference, 'f', 2, 64) + " SEK above the strike price (109.70 SEK)"
+		comment = "Stock is " + floatToString(difference) + " SEK above the strike price (109.70 SEK)"
 	}
 
-	price := strconv.FormatFloat(stock.Price.Last, 'f', 2, 64)
-	oldPrice := strconv.FormatFloat(stock.Price.PreviousClose, 'f', 2, 64)
-	message := "Current stock price is: " + price + " SEK\nPrevious stock price was: " + oldPrice + " SEK" + "\n" + comment
+	message := "Current stock price is: " + floatToString(stock.Price.Last) + " SEK"
+	message += "\nPrevious stock price was: " + floatToString(stock.Price.PreviousClose) + " SEK" + "\n"
+	message += comment
 	SendMessage(w, color, message)
 }
