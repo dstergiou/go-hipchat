@@ -39,7 +39,11 @@ func SendMessage(w http.ResponseWriter, color string, message string) {
 
 // StockPrice return the stock price for NET-B
 func StockPrice(w http.ResponseWriter, r *http.Request) {
-	var color string
+	var color, comment string
+	var difference float64
+
+	const strikePrice float64 = 109.70
+
 	stock, err := yquotes.NewStock("NET-B.ST", false)
 	if err != nil {
 		color = "yellow"
@@ -53,8 +57,16 @@ func StockPrice(w http.ResponseWriter, r *http.Request) {
 		color = "green"
 	}
 
+	if stock.Price.Last <= strikePrice {
+		difference = strikePrice - stock.Price.Last
+		comment = "Stock needs to go up " + strconv.FormatFloat(difference, 'f', 2, 64) + " SEK to hit the strike price (109.70 SEK)"
+	} else {
+		difference = stock.Price.Last - strikePrice
+		comment = "Stock is " + strconv.FormatFloat(difference, 'f', 2, 64) + " SEK above the strike price (109.70 SEK)"
+	}
+
 	price := strconv.FormatFloat(stock.Price.Last, 'f', 2, 64)
 	oldPrice := strconv.FormatFloat(stock.Price.PreviousClose, 'f', 2, 64)
-	message := "Current stock price is: " + price + " SEK\nPrevious stock price was: " + oldPrice + " SEK"
+	message := "Current stock price is: " + price + " SEK\nPrevious stock price was: " + oldPrice + " SEK" + "\n" + comment
 	SendMessage(w, color, message)
 }
