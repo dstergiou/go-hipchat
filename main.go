@@ -40,7 +40,7 @@ func SendMessage(w http.ResponseWriter, color string, message string) {
 // StockPrice return the stock price for NET-B
 func StockPrice(w http.ResponseWriter, r *http.Request) {
 	var color, comment string
-	var difference float64
+	var difference, percentage float64
 
 	const strikePrice float64 = 109.70
 
@@ -59,7 +59,9 @@ func StockPrice(w http.ResponseWriter, r *http.Request) {
 
 	if stock.Price.Last <= strikePrice {
 		difference = strikePrice - stock.Price.Last
+		percentage = (difference / stock.Price.Last) * 100
 		comment = "Stock needs to go up " + strconv.FormatFloat(difference, 'f', 2, 64) + " SEK to hit the strike price (109.70 SEK)"
+		comment += "\n This is a " + strconv.FormatFloat(percentage, 'f', 2, 64) + "% increase that we need"
 	} else {
 		difference = stock.Price.Last - strikePrice
 		comment = "Stock is " + strconv.FormatFloat(difference, 'f', 2, 64) + " SEK above the strike price (109.70 SEK)"
